@@ -1,11 +1,7 @@
-programa soma inicio
-	inteiro a;
-	inteiro b;
-	inteiro c;
-	inteiro max;
-	a = 5;
-	b = 3;
-	c = a + b;
-	escreva(c);
-	escreva(50);
+programa maior_num inicio
+  inteiro a;
+  inteiro b;
+  a = 2;
+  b = 3;
+  se(a) b = 2;
 fim.

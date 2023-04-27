@@ -2,8 +2,8 @@ package lexer
 
 import (
 	"bufio"
-	"dl/lexer/tag"
-	"dl/lexer/token"
+	"dl/tag"
+	"dl/token"
 	"io"
 	"os"
 	"unicode"
@@ -32,6 +32,10 @@ func New(file *os.File) *Lexer {
 			"inteiro":  tag.INT,
 		},
 	}
+}
+
+func (l *Lexer) Line() int {
+	return l.line
 }
 
 func (l *Lexer) nextChar() {
@@ -114,34 +118,39 @@ func (l *Lexer) NextToken() *token.Token {
 	case '>':
 		l.nextChar()
 		return token.New(tag.GT, ">")
+	case '.':
+		l.nextChar()
+		return token.New(tag.DOT, ".")
 	default:
 		if unicode.IsDigit(rune(l.peek)) {
 			number := ""
-			for {
+			for unicode.IsDigit(rune(l.peek)) {
 				number = number + string(l.peek)
 				l.nextChar()
-				if !unicode.IsDigit(rune(l.peek)) {
-					break
+
+				if l.peek == '.' {
+					number = number + string(l.peek)
+					l.nextChar()
+					for unicode.IsDigit(rune(l.peek)) {
+						number = number + string(l.peek)
+						l.nextChar()
+					}
+					return token.New(tag.LIT_REAL, number)
 				}
 			}
 			return token.New(tag.LIT_INT, number)
 		} else if isIdStart(l.peek) {
 			id := ""
-
 			for {
 				id = id + string(l.peek)
-
 				l.nextChar()
-
 				if !isIdPart(l.peek) {
 					break
 				}
 			}
-
 			if _, ok := l.keywords[id]; ok {
 				return token.New(l.keywords[id], id)
 			}
-
 			return token.New(tag.ID, id)
 		}
 	}

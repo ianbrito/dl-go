@@ -1,7 +1,7 @@
 package token
 
 import (
-	"dl/lexer/tag"
+	"dl/tag"
 	"fmt"
 )
 
