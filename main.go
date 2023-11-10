@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+
 	file, err := os.Open("prog.dl")
 	if err != nil {
 		panic(err)
